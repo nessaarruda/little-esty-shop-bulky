@@ -1,0 +1,7 @@
+<h1>My Discounts</h1>
+
+<% @discounts.each do |discount| %>
+<hr>
+<h2><%= "Quantity: #{discount.quantity} Percentage: #{discount.percentage}" %></h2>
+<% end %>
+<h3><%= link_to "Create Bulk Discount", new_merchant_bulk_discount_path(@merchant) %></h3>
