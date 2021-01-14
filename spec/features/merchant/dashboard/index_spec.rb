@@ -4,6 +4,10 @@ RSpec.describe 'merchant dashboard' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
 
+    @discount1 = @merchant1.bulk_discounts.create!(percentage: 0.10, quantity: 10)
+    @discount2 = @merchant1.bulk_discounts.create!(percentage: 0.20, quantity: 20)
+    @discount3 = @merchant1.bulk_discounts.create!(percentage: 0.30, quantity: 30)
+
     @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
     @customer_2 = Customer.create!(first_name: 'Cecilia', last_name: 'Jones')
     @customer_3 = Customer.create!(first_name: 'Mariah', last_name: 'Carrey')
@@ -91,7 +95,7 @@ RSpec.describe 'merchant dashboard' do
   end
   it "can see a section for Items Ready to Ship with list of names of items ordered and ids" do
     within("#items_ready_to_ship") do
-      
+
       expect(page).to have_content(@item_1.name)
       expect(page).to have_content(@item_1.invoice_ids)
 
@@ -114,5 +118,22 @@ RSpec.describe 'merchant dashboard' do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+  it 'has a link to view all my discounts, the link takes me to discount index page' do
+    expect(page).to have_link("My Discounts")
+
+    click_on "My Discounts"
+
+    expect(current_path).to eq(merchant_bulk_discounts_path)
+    expect(page).to have_link(@discount1.percentage)
+    expect(page).to have_link(@discount1.percentage)
+    expect(page).to have_link(@discount2.percentage)
+    expect(page).to have_link(@discount2.quantity)
+    expect(page).to have_link(@discount3.quantity)
+    expect(page).to have_link(@discount3.quantity)
+
+    click_on @discount1
+
+    expect(current_path).to eq(merchant_bulk_discount_path(@discount1))
   end
 end
