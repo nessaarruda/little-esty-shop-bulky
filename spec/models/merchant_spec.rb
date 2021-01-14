@@ -7,6 +7,7 @@ describe Merchant do
   describe 'relationships' do
     it { should have_many :invoices }
     it { should have_many :items }
+    it { should have_many :bulk_discounts }
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
     it { should have_many(:invoice_items).through(:items) }
@@ -20,14 +21,14 @@ describe Merchant do
       @m4 = Merchant.create!(name: 'Merchant 4')
       @m5 = Merchant.create!(name: 'Merchant 5')
       @m6 = Merchant.create!(name: 'Merchant 6')
-  
+
       @c1 = Customer.create!(first_name: 'Yo', last_name: 'Yoz')
       @c2 = Customer.create!(first_name: 'Hey', last_name: 'Heyz')
       @c3 = Customer.create!(first_name: 'Sup', last_name: 'Sop')
       @c4 = Customer.create!(first_name: 'Whaddup', last_name: 'Clouds')
       @c5 = Customer.create!(first_name: 'Tifa', last_name: 'Lockhart')
       @c6 = Customer.create!(first_name: 'Spongebob', last_name: 'Squarepants')
-  
+
       @i1 = Invoice.create!(merchant_id: @m1.id, customer_id: @c1.id, status: 2, created_at: "2012-03-12 14:54:09")
       @i2 = Invoice.create!(merchant_id: @m1.id, customer_id: @c1.id, status: 2, created_at: "2012-09-06 14:54:09")
       @i3 = Invoice.create!(merchant_id: @m1.id, customer_id: @c2.id, status: 2, created_at: "2012-03-28 14:54:09")
@@ -43,7 +44,7 @@ describe Merchant do
       @i13 = Invoice.create!(merchant_id: @m1.id, customer_id: @c3.id, status: 2, created_at: "2012-01-04 14:54:09")
       @i14 = Invoice.create!(merchant_id: @m1.id, customer_id: @c4.id, status: 2, created_at: "2012-03-28 14:54:09")
       @i15 = Invoice.create!(merchant_id: @m1.id, customer_id: @c6.id, status: 2, created_at: "2012-03-28 14:54:09")
-  
+
       @item_1 = Item.create!(name: 'pondering', description: 'hmmmm', unit_price: 10, merchant_id: @m1.id)
       @item_2 = Item.create!(name: 'thinking', description: 'hurts', unit_price: 8, merchant_id: @m2.id)
       @item_3 = Item.create!(name: 'best', description: 'aint this fun', unit_price: 5, merchant_id: @m3.id)
@@ -54,7 +55,7 @@ describe Merchant do
       @item_8 = Item.create!(name: 'bet', description: 'no cap', unit_price: 4, merchant_id: @m1.id)
       @item_9 = Item.create!(name: 'wiggle', description: 'wiggle wobble', unit_price: 2, merchant_id: @m1.id)
       @item_10 = Item.create!(name: 'jiggle', description: 'driving down a bumpy road', unit_price: 30, merchant_id: @m1.id)
-  
+
       @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 12, unit_price: 10, status: 0)
       @ii_2 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_1.id, quantity: 6, unit_price: 8, status: 1)
       @ii_3 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_9.id, quantity: 16, unit_price: 5, status: 2)
@@ -74,7 +75,7 @@ describe Merchant do
       @ii_17 = InvoiceItem.create!(invoice_id: @i15.id, item_id: @item_1.id, quantity: 12, unit_price: 10, status: 2)
       @ii_18 = InvoiceItem.create!(invoice_id: @i14.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 1)
       @ii_19 = InvoiceItem.create!(invoice_id: @i13.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 1)
-  
+
       @t1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @i1.id)
       @t2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @i2.id)
       @t3 = Transaction.create!(credit_card_number: 234092, result: 1, invoice_id: @i3.id)
@@ -88,8 +89,8 @@ describe Merchant do
       @t11 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @i13.id)
       @t12 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @i14.id)
       @t13 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @i15.id)
-  
-  
+
+
     end
 
     it 'can list items ready to ship' do
@@ -98,7 +99,7 @@ describe Merchant do
       end
       expect(expected.sort).to eq([@item_1.name, @item_1.name, @item_1.name, @item_1.name].sort)
     end
-    
+
     it 'shows a list of favorite customers' do
       expected = @m1.favorite_customers.map do |customer|
         customer[:first_name]
