@@ -53,8 +53,6 @@ RSpec.describe 'merchant bulk discounts show' do
     click_on "Edit Bulk Discount"
 
     expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount1))
-    expect(page).to have_content(@discount1.quantity)
-    expect(page).to have_content(@discount1.percentage)
     expect(@discount1.percentage).to eq(0.10)
     expect(@discount1.quantity).to eq(10)
     expect(page).to have_button(:submit)
@@ -65,6 +63,8 @@ RSpec.describe 'merchant bulk discounts show' do
     click_on :submit
 
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
+
+    @discount1.reload
 
     expect(@discount1.percentage).to eq(0.15)
     expect(@discount1.quantity).to eq(15)
