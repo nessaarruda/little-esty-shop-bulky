@@ -47,4 +47,26 @@ RSpec.describe 'merchant bulk discounts show' do
     expect(page).to have_content(@discount1.quantity)
     expect(page).to have_content(@discount1.percentage)
   end
+  it 'Has a link to edit discount' do
+    expect(page).to have_link("Edit Bulk Discount")
+
+    click_on "Edit Bulk Discount"
+
+    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount1))
+    expect(page).to have_content(@discount1.quantity)
+    expect(page).to have_content(@discount1.percentage)
+    expect(@discount1.percentage).to eq(0.10)
+    expect(@discount1.quantity).to eq(10)
+    expect(page).to have_button(:submit)
+
+    fill_in :percentage, with: 0.15
+    fill_in :quantity, with: 15
+
+    click_on :submit
+
+    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
+
+    expect(@discount1.percentage).to eq(0.15)
+    expect(@discount1.quantity).to eq(15)
+  end
 end
