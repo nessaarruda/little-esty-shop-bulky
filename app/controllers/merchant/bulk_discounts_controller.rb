@@ -2,7 +2,7 @@ class Merchant::BulkDiscountsController < ApplicationController
 
   def index
     @merchant = Merchant.find(params[:merchant_id])
-    @discounts = BulkDiscount.all
+    @discounts = @merchant.bulk_discounts
   end
 
   def show
@@ -11,17 +11,12 @@ class Merchant::BulkDiscountsController < ApplicationController
   end
 
   def new
+    @discount = BulkDiscount.new
   end
 
   def create
-    @discount = BulkDiscount.new(discount_params)
-    @discount.merchant_id = params[:merchant_id]
-    if @discount.save
-      redirect_to merchant_bulk_discounts_path(params[:merchant_id])
-    else
-      flash.notice = "All fields must be completed, get your act together."
-      render :new
-    end
+    @discount = Merchant.find(params[:merchant_id]).bulk_discounts.create!(discount_params)
+    redirect_to merchant_bulk_discounts_path(params[:merchant_id])
   end
 
   def destroy
@@ -38,6 +33,7 @@ class Merchant::BulkDiscountsController < ApplicationController
   def update
     @discount = BulkDiscount.find(params[:id])
     @discount.update(discount_params)
+
     redirect_to merchant_bulk_discount_path(params[:merchant_id], @discount)
   end
 

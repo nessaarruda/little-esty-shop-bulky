@@ -43,6 +43,12 @@ RSpec.describe 'merchant bulk discounts index' do
 
     visit merchant_bulk_discounts_path(@merchant1)
   end
+  it 'Has links for each discount show page' do
+
+    expect(page).to have_link(@discount1.id)
+    expect(page).to have_link(@discount2.id)
+    expect(page).to have_link(@discount3.id)
+  end
   it 'I see a link to create a discount' do
     expect(page).to have_link("Create Bulk Discount")
 
@@ -57,6 +63,7 @@ RSpec.describe 'merchant bulk discounts index' do
     expect(page).to have_field(:quantity)
     expect(page).to have_button(:submit)
     expect(@merchant1.bulk_discounts.count).to eq(3)
+
     click_on :submit
 
     expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
@@ -69,7 +76,7 @@ RSpec.describe 'merchant bulk discounts index' do
     first("#discounts-#{@discount1.id}").click_link(:delete)
 
     expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
-    expect(page).to_not have_content(@discount1.quantity)
+    expect(page).to_not have_content(@discount1)
     expect(@merchant1.bulk_discounts.count).to eq(2)
   end
 end
