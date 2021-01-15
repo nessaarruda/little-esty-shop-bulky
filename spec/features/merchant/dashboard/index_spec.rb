@@ -4,9 +4,9 @@ RSpec.describe 'merchant dashboard' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
 
-    @discount1 = @merchant1.bulk_discounts.create!(percentage: 0.10, quantity: 10)
-    @discount2 = @merchant1.bulk_discounts.create!(percentage: 0.20, quantity: 20)
-    @discount3 = @merchant1.bulk_discounts.create!(percentage: 0.30, quantity: 30)
+    @discount1 = @merchant1.bulk_discounts.create!(name: 'A', percentage: 0.10, quantity: 10)
+    @discount2 = @merchant1.bulk_discounts.create!(name: 'B', percentage: 0.20, quantity: 20)
+    @discount3 = @merchant1.bulk_discounts.create!(name: 'C', percentage: 0.30, quantity: 30)
 
     @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
     @customer_2 = Customer.create!(first_name: 'Cecilia', last_name: 'Jones')

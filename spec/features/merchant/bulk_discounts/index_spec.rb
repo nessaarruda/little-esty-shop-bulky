@@ -4,9 +4,9 @@ RSpec.describe 'merchant bulk discounts index' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
 
-    @discount1 = @merchant1.bulk_discounts.create!(percentage: 0.10, quantity: 10)
-    @discount2 = @merchant1.bulk_discounts.create!(percentage: 0.20, quantity: 20)
-    @discount3 = @merchant1.bulk_discounts.create!(percentage: 0.30, quantity: 30)
+    @discount1 = @merchant1.bulk_discounts.create!(name: 'A', percentage: 0.10, quantity: 10)
+    @discount2 = @merchant1.bulk_discounts.create!(name: 'B', percentage: 0.20, quantity: 20)
+    @discount3 = @merchant1.bulk_discounts.create!(name: 'C', percentage: 0.30, quantity: 30)
 
     @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
     @customer_2 = Customer.create!(first_name: 'Cecilia', last_name: 'Jones')
@@ -45,20 +45,22 @@ RSpec.describe 'merchant bulk discounts index' do
   end
   it 'Has links for each discount show page' do
 
-    expect(page).to have_link(@discount1.id)
-    expect(page).to have_link(@discount2.id)
-    expect(page).to have_link(@discount3.id)
+    expect(page).to have_link(@discount1.name)
+    expect(page).to have_link(@discount2.name)
+    expect(page).to have_link(@discount3.name)
   end
   it 'I see a link to create a discount' do
     expect(page).to have_link("Create Bulk Discount")
 
     click_on "Create Bulk Discount"
 
+    fill_in :name, with: 'D'
     fill_in :percentage, with: 0.10
     fill_in :quantity, with: 15
 
     expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
 
+    expect(page).to have_field(:name)
     expect(page).to have_field(:percentage)
     expect(page).to have_field(:quantity)
     expect(page).to have_button(:submit)

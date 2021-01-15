@@ -5,6 +5,7 @@ RSpec.describe BulkDiscount, type: :model do
   it { should belong_to :merchant }
   end
   describe "validations" do
+    it { should validate_presence_of :name }
     it { should validate_presence_of :percentage }
     it { should validate_presence_of :quantity }
   end

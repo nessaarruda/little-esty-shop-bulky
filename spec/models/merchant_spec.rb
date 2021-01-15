@@ -22,6 +22,14 @@ describe Merchant do
       @m5 = Merchant.create!(name: 'Merchant 5')
       @m6 = Merchant.create!(name: 'Merchant 6')
 
+      @discount1 = @m1.bulk_discounts.create!(name: 'A', percentage: 0.10, quantity: 10)
+      @discount2 = @m1.bulk_discounts.create!(name: 'B', percentage: 0.20, quantity: 20)
+      @discount3 = @m1.bulk_discounts.create!(name: 'C', percentage: 0.30, quantity: 30)
+      
+      @discount1 = @m2.bulk_discounts.create!(name: 'A', percentage: 0.10, quantity: 10)
+      @discount2 = @m2.bulk_discounts.create!(name: 'B', percentage: 0.20, quantity: 20)
+      @discount3 = @m2.bulk_discounts.create!(name: 'C', percentage: 0.30, quantity: 30)
+
       @c1 = Customer.create!(first_name: 'Yo', last_name: 'Yoz')
       @c2 = Customer.create!(first_name: 'Hey', last_name: 'Heyz')
       @c3 = Customer.create!(first_name: 'Sup', last_name: 'Sop')
@@ -120,6 +128,9 @@ describe Merchant do
 
     it 'can list the merchants best day' do
       expect(@m1.best_day).to eq(@i3.created_at.to_date)
+    end
+    it 'can check for discounts for invoices' do
+
     end
   end
 end

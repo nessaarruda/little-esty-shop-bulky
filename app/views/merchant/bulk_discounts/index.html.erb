@@ -3,8 +3,8 @@
 <% @discounts.each do |discount| %>
 <hr>
 <section id=<%= "discounts-#{discount.id}" %>>
-<h2><%= "Quantity: #{discount.quantity} Percentage: #{discount.percentage}" %> </h2>
-<%= link_to discount.id, merchant_bulk_discount_path(@merchant, discount) %>
+<h2><%= "Name: #{discount.name} Quantity: #{discount.quantity} Percentage: #{discount.percentage}" %> </h2>
+<%= link_to discount.name, merchant_bulk_discount_path(@merchant, discount) %>
 <%= link_to :delete, merchant_bulk_discount_path(@merchant, discount), method: :delete %>
 </section>
 <% end %>
