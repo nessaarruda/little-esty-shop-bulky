@@ -62,4 +62,14 @@ RSpec.describe 'merchant bulk discounts index' do
     expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
     expect(@merchant1.bulk_discounts.count).to eq(4)
   end
+  it 'Next to each discount I see a link to delete it' do
+    expect(page).to have_link(:delete)
+    expect(@merchant1.bulk_discounts.count).to eq(3)
+
+    first("#discounts-#{@discount1.id}").click_link(:delete)
+
+    expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+    expect(page).to_not have_content(@discount1.quantity)
+    expect(@merchant1.bulk_discounts.count).to eq(2)
+  end
 end
