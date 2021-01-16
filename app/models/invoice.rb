@@ -13,10 +13,12 @@ class Invoice < ApplicationRecord
   enum status: [:cancelled, :in_progress, :complete]
 
   def discounted_total_revenue
+    invoiceitems = InvoiceItem.joins(:invoice).where(invoice_id: self.id)
     total = 0
-    invoice_items.each do |invoice|
-      total += check_discount(invoice.quantity, invoice.item_id) #DEAL WITH INVOICE WITH MULTIPLE ITEMS
+    invoiceitems.each do |invoice|
+      total += check_discount(invoice.quantity, invoice.item_id)
     end
+    total
   end
 
   def check_discount(quantity, item_id)
