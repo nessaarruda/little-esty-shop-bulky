@@ -5,7 +5,7 @@ RSpec.describe 'invoices show' do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Jewelry')
 
-    @discount1 = @merchant1.bulk_discounts.create!(name: 'A', percentage: 0.10, quantity: 10)
+    @discount1 = @merchant1.bulk_discounts.create!(name: 'A', percentage: 0.10, quantity: 9)
     @discount2 = @merchant1.bulk_discounts.create!(name: 'B', percentage: 0.20, quantity: 20)
     @discount3 = @merchant1.bulk_discounts.create!(name: 'C', percentage: 0.30, quantity: 30)
 
@@ -99,36 +99,15 @@ RSpec.describe 'invoices show' do
       expect(page).to_not have_content("in progress")
      end
   end
-  xit 'total revenue includes bulk discounts in the calculation' do
+  it 'total revenue includes bulk discounts in the calculation' do
     visit merchant_invoice_path(@merchant1, @invoice_1)
-    #item 1 and is in invoice 1 and 2, only apply for invoice 1
-    #revenue before discount for invoice 1 from item 1 90
-    #after discount for item 1 82
-    discount1 = @merchant1.bulk_discounts.create!(percentage: 0.10, quantity: 9)
 
-    #item 8 is in invoice 1 apply discount
-    #revenue before discount for invoice 1 from item 8 72
-    #after discount for item 8 57.6
-    discount2 = @merchant1.bulk_discounts.create!(percentage: 0.20, quantity: 10)
-
-    #item 3 invoice 4 apply discount
-    #revenue before discount for invoice 4 from item 3 15
-    #after discount for item 3 10.5
-    discount3 = @merchant1.bulk_discounts.create!(percentage: 0.30, quantity: 2)
-
-
-    expect(@invoice_2.total_revenue).to eq(10)
-    expect(@invoice_3.total_revenue).to eq(16)
-    expect(@invoice_5.total_revenue).to eq(1)
-    expect(@invoice_6.total_revenue).to eq(3)
-    expect(@invoice_7.total_revenue).to eq(6)
-    expect(@invoice_8.total_revenue).to eq(1)
-    expect(@invoice_1.total_revenue).to eq(162) #after discount 139.6
-    expect(@invoice_4.total_revenue).to eq(15) #after discount 10.5
+    expect(page).to have_content("Total Revenue After Discount: #{@invoice_1.discounted_total_revenue}")
+    expect(page).to_not have_content("Total Revenue After Discount: #{@invoice_2.discounted_total_revenue}")
   end
 
   xit 'Has a link to the discount for every item that applies' do
     visit merchant_invoice_path(@merchant1, @invoice_1)
-    #this will apply for items 1, 8, 3
+
   end
 end
