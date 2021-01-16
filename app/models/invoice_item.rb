@@ -16,4 +16,8 @@ class InvoiceItem < ApplicationRecord
            .order(:created_at)
            .distinct
   end
+
+  def check_discount(data)
+    require "pry"; binding.pry
+  end
 end
