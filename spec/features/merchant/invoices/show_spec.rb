@@ -106,8 +106,9 @@ RSpec.describe 'invoices show' do
     expect(page).to_not have_content("Total Revenue After Discount: #{@invoice_2.discounted_total_revenue}")
   end
 
-  xit 'Has a link to the discount for every item that applies' do
+  it 'Has a link to the discount for every item that applies' do
     visit merchant_invoice_path(@merchant1, @invoice_1)
 
+    expect(page).to have_link("Discount #{@discount1.id}")
   end
 end

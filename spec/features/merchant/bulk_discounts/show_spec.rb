@@ -51,7 +51,7 @@ RSpec.describe 'merchant bulk discounts show' do
     expect(page).to have_link("Edit Bulk Discount")
 
     click_on "Edit Bulk Discount"
-
+    expect(find_field(:name).value).to eq(@discount1.name)
     expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount1))
     expect(@discount1.percentage).to eq(0.10)
     expect(@discount1.quantity).to eq(10)
