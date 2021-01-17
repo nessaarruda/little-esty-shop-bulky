@@ -1,0 +1,11 @@
+<h1>My Discounts</h1>
+
+<% @discounts.each do |discount| %>
+<hr>
+<section id=<%= "discounts-#{discount.id}" %>>
+<h2><%= "Name: #{discount.name} Quantity: #{discount.quantity} Percentage: #{discount.percentage}" %> </h2>
+<%= link_to discount.name, merchant_bulk_discount_path(@merchant, discount) %>
+<%= link_to :delete, merchant_bulk_discount_path(@merchant, discount), method: :delete %>
+</section>
+<% end %>
+<h3><%= link_to "Create Bulk Discount", new_merchant_bulk_discount_path(@merchant) %></h3>

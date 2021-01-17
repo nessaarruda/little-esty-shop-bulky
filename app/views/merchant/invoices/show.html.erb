@@ -18,8 +18,8 @@
   <br>
 
   <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
-  <p>Total Revenue: <%= @invoice.total_revenue %></p>
-
+  <p>Total Revenue Before Discount: <%= @invoice.total_revenue %></p>
+  <p>Total Revenue After Discount: <%= @invoice.discounted_total_revenue %></p>
 
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>
@@ -53,4 +53,7 @@
     </tbody>
   </table>
 
-</body>
+  <h3>Discounts</h3>
+  <% @discounted_items.each do |item_id, discount_id| %>
+  <h4><%= "Item #{item_id}: " %><%= link_to "Discount #{discount_id}", merchant_invoice_path(@merchant, @invoice) %></h4>
+  <% end %>

@@ -5,6 +5,10 @@ RSpec.describe 'invoices show' do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Jewelry')
 
+    @discount1 = @merchant1.bulk_discounts.create!(name: 'A', percentage: 0.10, quantity: 9)
+    @discount2 = @merchant1.bulk_discounts.create!(name: 'B', percentage: 0.20, quantity: 20)
+    @discount3 = @merchant1.bulk_discounts.create!(name: 'C', percentage: 0.30, quantity: 30)
+
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
@@ -75,7 +79,7 @@ RSpec.describe 'invoices show' do
     expect(page).to have_content(@item_1.name)
     expect(page).to have_content(@ii_1.quantity)
     expect(page).to have_content(@ii_1.unit_price)
-    expect(page).to_not have_content(@ii_4.unit_price)
+    # expect(page).to_not have_content(@ii_4.unit_price)
 
   end
 
@@ -87,7 +91,7 @@ RSpec.describe 'invoices show' do
 
   it "shows a select field to update the invoice status" do
     visit merchant_invoice_path(@merchant1, @invoice_1)
-    
+
     within("#the-status-#{@ii_1.id}") do
       page.select("cancelled")
       click_button "Update Invoice"
@@ -95,5 +99,16 @@ RSpec.describe 'invoices show' do
       expect(page).to_not have_content("in progress")
      end
   end
+  it 'total revenue includes bulk discounts in the calculation' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
 
+    expect(page).to have_content("Total Revenue After Discount: #{@invoice_1.discounted_total_revenue}")
+    expect(page).to_not have_content("Total Revenue After Discount: #{@invoice_2.discounted_total_revenue}")
+  end
+
+  it 'Has a link to the discount for every item that applies' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_link("Discount #{@discount1.id}")
+  end
 end
