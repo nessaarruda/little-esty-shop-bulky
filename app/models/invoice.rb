@@ -79,15 +79,4 @@ class Invoice < ApplicationRecord
     end
     discount_id
   end
-
-  # def find_link
-  #   @discounted_items = @invoice.find_items
-  #   if @discounted_items.empty?
-  #     'No discounts'
-  #   else
-  #     @discounted_items.each do |discount|
-  #       link_to "Discount: discount", merchant_bulk_discount_path(@merchant, discount)
-  #     end
-  #   end
-  # end 
 end
