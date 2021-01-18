@@ -116,16 +116,16 @@ describe Merchant do
       expect(expected).to eq([@c1.first_name, @c2.first_name, @c3.first_name, @c4.first_name, @c6.first_name])
     end
 
-    # it 'top_5_items' do
-    #   expect(@m1.top_5_items).to eq([@item_1, @item_9, @item_10, @item_7, @item_8])
-    # end
-    #
-    # it 'can list the top 5 merchants' do
-    #   expected = Merchant.top_merchants.map do |m|
-    #     m[:name]
-    #   end
-    #   expect(expected).to eq([@m1.name, @m3.name, @m2.name, @m4.name, @m5.name])
-    # end
+    it 'top_5_items' do
+      expect(@m1.top_5_items).to eq([@item_1, @item_9, @item_10, @item_7, @item_8])
+    end
+    
+    it 'can list the top 5 merchants' do
+      expected = Merchant.top_merchants.map do |m|
+        m[:name]
+      end
+      expect(expected).to eq([@m1.name, @m3.name, @m2.name, @m4.name, @m5.name])
+    end
 
     it 'can list the merchants best day' do
       expect(@m1.best_day).to eq(@i3.created_at.to_date)
