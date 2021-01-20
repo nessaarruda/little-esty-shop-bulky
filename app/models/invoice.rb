@@ -26,21 +26,19 @@ class Invoice < ApplicationRecord
   end
 
   def check_discount(quantity, item_id)
-    quantity_array = BulkDiscount
-                    .joins(:merchant)
-                    .where(merchant_id: self.merchant.id)
+    percentage = BulkDiscount
+                .joins(:merchant)
+                .where(merchant_id: self.merchant.id)
+                .where("quantity <= ?", quantity)
+                .order(percentage: :desc)
+                .pluck(:percentage).first
 
-    percentage = 0.0
-    quantity_array.each do |discount|
-      if discount.quantity <= quantity
-        percentage = discount.percentage if discount.percentage > percentage
-      end
-    end
     total(item_id, percentage, quantity)
   end
 
   def total(item_id, percentage, quantity)
     total = 0
+    percentage = 0 if !percentage
     Item.joins(:invoice_items).each do |item|
       if item.id == item_id
         unit_price = item.unit_price * (1 - percentage)
