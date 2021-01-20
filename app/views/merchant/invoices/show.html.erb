@@ -54,6 +54,10 @@
   </table>
 
   <h3>Discounts</h3>
-  <% @discounted_items.each do |item_id, discount_id| %>
-  <h4><%= "Item #{item_id}: " %><%= link_to "Discount #{discount_id}", merchant_invoice_path(@merchant, @invoice) %></h4>
+  <% if @discounted_items.empty? %>
+      <p>No Discounts</p>
+    <% else %>
+      <% @discounted_items.each do |item_id, discount_id| %>
+        <h4><%= "Item #{item_id}: " %><%= link_to "Discount #{discount_id}", merchant_invoice_path(@merchant, @invoice) %></h4>
+      <% end %>
   <% end %>
