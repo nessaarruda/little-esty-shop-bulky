@@ -53,11 +53,11 @@
     </tbody>
   </table>
 
-  <h3>Discounts</h3>
-  <% if @discounted_items.empty? %>
+<h3>Discounts</h3>
+<% @invoice.invoice_items.each do |invoice_item| %>
+<%if invoice_item.qualified_discount %>
+    <p><%= invoice_item.item.name %></p><%= link_to "Discount #{invoice_item.qualified_discount.id}", merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.qualified_discount) %>
+  <% else %>
       <p>No Discounts</p>
-    <% else %>
-      <% @discounted_items.each do |item_id, discount_id| %>
-        <h4><%= "Item #{item_id}: " %><%= link_to "Discount #{discount_id}", merchant_invoice_path(@merchant, @invoice) %></h4>
-      <% end %>
   <% end %>
+<% end %>

@@ -7,7 +7,6 @@ class Merchant::InvoicesController < ApplicationController
   end
 
   def show
-    @discounted_items = @invoice.find_items
     @customer = @invoice.customer
     @invoice_item = InvoiceItem.where(invoice_id: params[:id]).first
   end

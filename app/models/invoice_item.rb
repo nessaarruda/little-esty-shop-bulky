@@ -17,7 +17,13 @@ class InvoiceItem < ApplicationRecord
            .distinct
   end
 
-  def check_discount(data)
-    require "pry"; binding.pry
+  def qualified_discount
+    self
+    .item
+    .merchant
+    .bulk_discounts
+    .where('quantity <= ?', self.quantity)
+    .order(percentage: :desc)
+    .first
   end
 end

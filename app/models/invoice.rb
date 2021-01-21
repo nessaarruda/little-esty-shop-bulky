@@ -32,7 +32,6 @@ class Invoice < ApplicationRecord
                 .where("quantity <= ?", quantity)
                 .order(percentage: :desc)
                 .pluck(:percentage).first
-
     total(item_id, percentage, quantity)
   end
 
@@ -47,34 +46,4 @@ class Invoice < ApplicationRecord
     end
     total
   end
-
-  def find_items
-    invoiceitems = InvoiceItem.joins(:invoice).where(invoice_id: self.id)
-    discounted_items = {}
-
-    invoiceitems.each do |invoiceitem|
-      discount_id = find_discount_id(invoiceitem.quantity)
-      if discount_id
-        discounted_items[invoiceitem.item_id] = discount_id
-      end
-    end
-    discounted_items
-  end
-
-  def find_discount_id(quantity)
-    quantity_array = BulkDiscount
-                    .joins(:merchant)
-                    .where(merchant_id: self.merchant.id)
-    percentage = 0.0
-    discount_id = nil
-    quantity_array.each do |discount|
-      if discount.quantity <= quantity
-        if discount.percentage > percentage
-          percentage = discount.percentage
-          discount_id = discount.id
-        end
-      end
-    end
-    discount_id
-  end
-end
+end 
